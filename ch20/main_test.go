@@ -4,32 +4,32 @@ import (
 	"testing"
 )
 
-func BenchmarkStringPlus1000(b *testing.B) {
-	p := initStrings(1000)
+func BenchmarkStringPlus10000(b *testing.B) {
+	p := initStrings(10000)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		StringPlus(p)
 	}
 }
 
-func BenchmarkStringFmt1000(b *testing.B) {
-	p := initStringi(1000)
+func BenchmarkStringFmt10000(b *testing.B) {
+	p := initStringi(10000)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		StringFmt(p)
 	}
 }
 
-func BenchmarkStringJoin1000(b *testing.B) {
-	p := initStrings(1000)
+func BenchmarkStringJoin10000(b *testing.B) {
+	p := initStrings(10000)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		StringJoin(p)
 	}
 }
 
-func BenchmarkStringBuffer1000(b *testing.B) {
-	p := initStrings(1000)
+func BenchmarkStringBuffer10000(b *testing.B) {
+	p := initStrings(10000)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		StringBuffer(p)
