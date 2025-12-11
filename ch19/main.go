@@ -6,60 +6,62 @@ import (
 )
 
 func main() {
-	coms:=buy(100) //采购100套配件
-	//三班人同时组装100部手机
-	phones1:=build(coms)
-	phones2:=build(coms)
-	phones3:=build(coms)
-	//汇聚三个channel成一个
-	phones:=merge(phones1,phones2,phones3)
-	packs:=pack(phones)//打包它们以便售卖
+	containers:=puchase(110) //采购110套容器
+	//五班人同时堆叠110套容器
+	images1:=mark(containers)
+	images2:=mark(containers)
+	images3:=mark(containers)
+	images4:=mark(containers)
+	images5:=mark(containers)
+	//汇聚五个channel成一个
+	images:=gather(images1,images2,images3,images4,images5)
+	targets:=target(images)//压缩它们以便呈现
 
 	//输出测试，看看效果
-	for p:=range packs{
+	for p:=range targets{
 		fmt.Println(p)
 	}
 }
 
 //工序 1 采购
-func buy(n int) <-chan string{
+func puchase(n int) <-chan string{
 	out:=make(chan string)
 	go func(){
 		defer close(out)
 		for i:=1;i<=n;i++{
-			out<-fmt.Sprint("配件",i)
+			out<-fmt.Sprint("容器",i)
 		}
 	}()
 	return out
 }
 
-//工序 2 组装
-func build(in <-chan string) <-chan string{
+//工序 2 堆叠
+func mark(in <-chan string) <-chan string{
 	out:=make (chan string)
 	go func(){
 		defer close(out)
 		for c:=range in{
-			out<-"组装("+c+")"
+			out<-"堆叠["+c+"]"
 		}
 	}()
 	return out
 	
 }
 
-//工序 3 打包
-func pack(in <-chan string) <-chan string {
+//工序 3 压缩成镜像
+func target(in <-chan string) <-chan string {
 	out:=make(chan string)
 	go func() {
 		defer close(out)
 		for c:=range in{
-			out<-"打包("+c+")"
+			out<-"镜像["+c+"]"
 		}
 	}()
 	return out
 }
 
 //扇入函数（组件），把多个channel中的数据发送到一个channel中
-func merge(ins ...<-chan string) <-chan string {
+func gather(ins ...<-chan string) <-chan string {
 	var wg sync.WaitGroup
 	out:=make(chan string)
 
